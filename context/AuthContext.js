@@ -15,7 +15,24 @@ export const AuthProvider = ({ children }) => {
 
   // Register
   const register = async (user) => {
-    console.log(user)
+    const res = await fetch(`${NEXT_URL}/api/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+
+    const data = await res.json()
+    console.log(data)
+
+    if (res.ok) {
+      setUser(data.user)
+      router.push('/account/dashboard')
+    } else {
+      setError(data.message)
+      setError(null)
+    }
   }
 
   // Login
@@ -33,6 +50,7 @@ export const AuthProvider = ({ children }) => {
 
     if (res.ok) {
       setUser(data.user)
+      router.push('/account/dashboard')
     } else {
       setError(data.message)
       setError(null)
